@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Floating Help Card (CD spinner)</title>
+    <style>
+        :root {
+            --card-bg: #ffffff;
+            --card-radius: 18px;
+            --accent: #000;
+            --muted: #9aa0a6;
+            --shadow: 0 8px 28px rgba(11, 20, 30, 0.523);
+        }
+
+        /* Container fixed bottom-right */
+        .help-widget {
+            position: fixed;
+            right: 22px;
+            bottom: 28px;
+            z-index: 9999;
+            font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        /* Main card */
+        .card {
+            background: linear-gradient(180deg, rgba(255, 255, 255, 1), rgba(250, 250, 250, 1));
+            border-radius: var(--card-radius);
+            box-shadow: var(--shadow);
+            padding: 12px 16px;
+            /* display: flex; */
+            /* align-items: center; */
+            gap: 14px;
+            min-width: 250px;
+            max-width: 250px;
+        }
+
+        .iner-card{
+             display: flex;
+             align-items: center;
+             gap: 10px;
+        }
+
+        /* CD avatar wrapper */
+        .cd-wrap {
+            width: 48px;
+            height: 48px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Spinning CD style (replace background-image if you have a real cd image) */
+        .cd {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background:
+                radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.35) 2%, transparent 3%),
+                conic-gradient(#0f1724 0deg, #0f1724 40deg, #2b3440 70deg, #0f1724 140deg, #2b3440 220deg, #0f1724 300deg);
+            box-shadow: inset 0 -6px 10px rgba(255, 255, 255, 0.06), 0 2px 6px rgba(2, 6, 23, 0.12);
+            animation: spin 3.6s linear infinite;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transform-origin: center;
+        }
+
+        /* small hole in the middle */
+        .cd::after {
+            content: "";
+            width: 8px;
+            height: 8px;
+            background: rgba(0, 0, 0, 0.85);
+            border-radius: 50%;
+            box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.05) inset;
+        }
+
+        /* text container */
+        .card-content {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            flex: 1;
+        }
+
+        .title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #111827;
+            line-height: 1;
+        }
+
+        .sub {
+            font-size: 12px;
+            color: var(--muted);
+            margin-top: -2px;
+        }
+
+        /* right column - action */
+        .action {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .call-btn {
+            background: var(--accent);
+            color: #fff;
+            border-radius: 28px;
+            padding: 10px 16px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 6px 18px rgba(2, 6, 23, 0.18);
+            transition: transform .12s ease, box-shadow .12s ease, opacity .12s ease;
+            text-decoration: none;
+            width: 100%;
+            font-size: 18px;
+        }
+
+        .call-btn svg {
+            width: 20px;
+            height: 20px;
+            display: block;
+        }
+
+        .call-btn:active {
+            transform: translateY(1px) scale(.998);
+        }
+
+        .call-btn:hover {
+            opacity: 0.98;
+            transform: translateY(-2px);
+        }
+
+        /* spin animation */
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* accessibility: respects reduced motion */
+        @media (prefers-reduced-motion: reduce) {
+            .cd {
+                animation: none;
+            }
+
+            .floating-badge {
+                animation: none;
+            }
+        }
+
+        /* small responsive tweak */
+        @media (max-width:420px) {
+            .card {
+                min-width: 260px;
+                max-width: 86vw;
+                padding: 10px;
+                gap: 10px;
+            }
+
+            .cd-wrap {
+                width: 42px;
+                height: 42px;
+            }
+
+            .cd {
+                width: 40px;
+                height: 40px;
+            }
+
+            .call-btn {
+                padding: 8px 12px;
+                font-size: 13px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Floating help widget -->
+    <div class="help-widget" role="region" aria-label="Help widget">
+        <div class="card" role="group" aria-label="Need help card">
+
+            <div class="iner-card">
+                <div class="cd-wrap" aria-hidden="true">
+                    <div class="cd" title="spinning cd"></div>
+                </div>
+    
+                <div class="card-content">
+                    <div class="title">Need help?</div>
+                </div>
+            </div>
+
+            <div class="action">
+                <a href="tel:+1234567890" class="call-btn" aria-label="Start a call">
+                    <!-- phone icon (inline SVG) -->
+                    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path
+                            d="M21 16.5v3a1.5 1.5 0 0 1-1.64 1.49c-2.55-.26-5.07-1.5-7.13-3.57-2.06-2.06-3.31-4.58-3.57-7.13A1.5 1.5 0 0 1 10.5 8h3a1.5 1.5 0 0 1 1.5 1.26 12.05 12.05 0 0 0 .89 3.43 1.5 1.5 0 0 1-.36 1.61L14.86 16a15.3 15.3 0 0 0 3.64 3.64l1.7-1.17a1.5 1.5 0 0 1 1.61-.36c1.01.37 1.41 1.59.59 2.4z"
+                            fill="#fff"></path>
+                    </svg>
+                    Start a call
+                </a>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+
+</html>
